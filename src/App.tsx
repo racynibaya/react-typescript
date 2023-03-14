@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div className='App'>
-      <Like isClicked={clicked} onHandleClick={() => setClicked(!clicked)} />
+      <Like />
     </div>
   );
 };

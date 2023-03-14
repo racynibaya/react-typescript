@@ -1,29 +1,22 @@
 import React from 'react';
+import { MouseEvent, useState } from 'react';
+
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
-interface Props {
-  isClicked: boolean;
-  onHandleClick: () => void;
-}
-const Like = ({ onHandleClick, isClicked }: Props) => {
+const Like = () => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = (e: MouseEvent) => {
+    setIsClicked(!isClicked);
+  };
   return (
-    <div>
+    <>
       {isClicked ? (
-        <AiFillHeart
-          color='red'
-          size={50}
-          onClick={onHandleClick}
-          style={{ transition: 'all 3s' }}
-        />
+        <AiFillHeart color='#ff6b81' size={50} onClick={handleClick} />
       ) : (
-        <AiOutlineHeart
-          color='red'
-          size={50}
-          onClick={onHandleClick}
-          style={{ transition: 'all 3s' }}
-        />
+        <AiOutlineHeart color='#ff6b81' size={50} onClick={handleClick} />
       )}
-    </div>
+    </>
   );
 };
 
