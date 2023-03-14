@@ -1,14 +1,20 @@
-import ListGroup from './components/ListGroup';
-import './App.css';
+import { useState } from 'react';
 
-function App() {
+import Button from './components/Button';
+import './App.css';
+import Alert from './components/Alert';
+
+const App = () => {
   const items = ['New york', 'San Franciso', 'Tokyo', 'London'];
+  const [clicked, setClicked] = useState(false);
 
   return (
     <div className='App'>
-      <ListGroup items={items} heading='Cities' />
+      <Button color='primary' onClick={() => setClicked(!clicked)}>
+        My Button
+      </Button>
     </div>
   );
-}
+};
 
 export default App;
