@@ -4,9 +4,11 @@ import { MouseEvent } from 'react';
 interface Props {
   items: string[];
   heading: string;
+  //   (item: string) => void
+  onSelectItem: (item: string) => void;
 }
 
-function ListGroup({ items, heading }: Props) {
+const ListGroup = ({ items, heading, onSelectItem }: Props) => {
   const [selectedItems, setSelectedItems] = useState(-1);
 
   return (
@@ -24,7 +26,10 @@ function ListGroup({ items, heading }: Props) {
                   ? 'list-group-item active'
                   : 'list-group-item'
               } `}
-              onClick={() => setSelectedItems(i)}
+              onClick={() => {
+                setSelectedItems(i);
+                onSelectItem(item);
+              }}
             >
               {item}
             </li>
@@ -33,6 +38,6 @@ function ListGroup({ items, heading }: Props) {
       </ul>
     </>
   );
-}
+};
 
 export default ListGroup;
