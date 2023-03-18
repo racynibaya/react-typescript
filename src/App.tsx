@@ -26,7 +26,19 @@ const App = () => {
 
   return (
     <div className='App'>
-      <ExpandableText maxCount={30} />
+      <ExpandableText maxCount={100}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia minima
+        provident alias eos consequuntur! Voluptatibus quod, totam sint nesciunt
+        quae odit aut enim explicabo dolorum temporibus ipsum veniam et atque
+        porro assumenda fugit amet. Ratione qui vero tempora dolorem recusandae
+        officiis impedit, blanditiis aperiam deserunt, quas cum culpa ut harum
+        saepe voluptatem dicta fugiat ea! Placeat, qui cum. Nam, ullam numquam
+        magni, sequi dignissimos facere soluta ipsam necessitatibus repellendus
+        praesentium inventore nostrum vitae quos accusamus unde, illum optio
+        perferendis? Inventore vitae illum hic dolor amet, provident quos beatae
+        mollitia vel fuga velit repudiandae maxime accusantium voluptates optio
+        odit ducimus quaerat!
+      </ExpandableText>
       <button onClick={handleClick}>Add count</button>
     </div>
   );
