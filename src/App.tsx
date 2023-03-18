@@ -4,6 +4,7 @@ import Button from './components/Button';
 import './App.css';
 import Alert from './components/Alert';
 import Like from './components/Like';
+import ExpandableText from './components/ExpandableText';
 
 const App = () => {
   const [cart, setCart] = useState({
@@ -25,12 +26,7 @@ const App = () => {
 
   return (
     <div className='App'>
-      {/* <p>{pizza.name}</p>
-      <p>Ingredients: {...pizza.toppings}</p> */}
-      {cart.items.map((item, i) => (
-        <p key={item.id}>{item.quantity}</p>
-      ))}
-
+      <ExpandableText maxCount={30} />
       <button onClick={handleClick}>Add count</button>
     </div>
   );
