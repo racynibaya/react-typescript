@@ -2,6 +2,7 @@ import React, { FormEvent } from 'react';
 
 const Form = () => {
   const handleSubmit = (event: FormEvent) => {
+    // prevent the default behavior of reloading the entire page
     event.preventDefault();
 
     console.log('Form Submitted');
