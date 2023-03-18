@@ -1,11 +1,22 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, RefObject, useRef } from 'react';
 
 const Form = () => {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
+
+  const person = {
+    name: '',
+    age: 0,
+  };
+
   const handleSubmit = (event: FormEvent) => {
     // prevent the default behavior of reloading the entire page
     event.preventDefault();
+    if (nameRef.current !== null) person.name = nameRef.current.value;
+    if (ageRef.current !== null)
+      person.age = Number.parseInt(ageRef.current.value) || 0;
 
-    console.log('Form Submitted');
+    console.log(person);
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -13,13 +24,13 @@ const Form = () => {
         <label htmlFor='name' className='form-label'>
           Name
         </label>
-        <input id='name' type='text' className='form-control' />
+        <input ref={nameRef} id='name' type='text' className='form-control' />
       </div>
       <div className='mb-3'>
         <label htmlFor='age' className='form-label'>
           Age
         </label>
-        <input id='age' type='text' className='form-control' />
+        <input ref={ageRef} id='age' type='text' className='form-control' />
       </div>
       <button className='btn btn-primary' type='submit'>
         Submit
