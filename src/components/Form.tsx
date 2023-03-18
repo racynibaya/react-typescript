@@ -1,36 +1,48 @@
-import React, { FormEvent, RefObject, useRef } from 'react';
+import React, { FormEvent, ChangeEvent, useState } from 'react';
 
 const Form = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const ageRef = useRef<HTMLInputElement>(null);
-
-  const person = {
+  // It became Controlled component because every value is controlled by React not by DOM anymore: setting value of input using the state.
+  const [person, setPerson] = useState({
     name: '',
-    age: 0,
-  };
+    age: '',
+  });
 
   const handleSubmit = (event: FormEvent) => {
     // prevent the default behavior of reloading the entire page
     event.preventDefault();
-    if (nameRef.current !== null) person.name = nameRef.current.value;
-    if (ageRef.current !== null)
-      person.age = Number.parseInt(ageRef.current.value) || 0;
 
     console.log(person);
   };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPerson({ ...person, [event.target.id]: event.target.value });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='mb-3'>
         <label htmlFor='name' className='form-label'>
           Name
         </label>
-        <input ref={nameRef} id='name' type='text' className='form-control' />
+        <input
+          type='text'
+          className='form-control'
+          id='name'
+          onChange={handleChange}
+          value={person.name}
+        />
       </div>
       <div className='mb-3'>
         <label htmlFor='age' className='form-label'>
           Age
         </label>
-        <input ref={ageRef} id='age' type='text' className='form-control' />
+        <input
+          type='text'
+          className='form-control'
+          id='age'
+          value={person.age}
+          onChange={handleChange}
+        />
       </div>
       <button className='btn btn-primary' type='submit'>
         Submit
