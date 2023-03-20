@@ -1,35 +1,31 @@
 import React, { FormEvent, ChangeEvent, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form/dist/types';
 
 const Form = () => {
-  // It became Controlled component because every value is controlled by React not by DOM anymore: setting value of input using the state.
-  const [person, setPerson] = useState({
-    name: '',
-    age: '',
-  });
+  const { register, handleSubmit } = useForm();
 
-  const handleSubmit = (event: FormEvent) => {
-    // prevent the default behavior of reloading the entire page
-    event.preventDefault();
-
-    console.log(person);
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPerson({ ...person, [event.target.id]: event.target.value });
+  const onSubmit = async (data: FieldValues) => {
+    const response = await fetch('url', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-3'>
         <label htmlFor='name' className='form-label'>
           Name
         </label>
         <input
+          {...register('name')}
           type='text'
           className='form-control'
           id='name'
-          onChange={handleChange}
-          value={person.name}
         />
       </div>
       <div className='mb-3'>
@@ -37,11 +33,10 @@ const Form = () => {
           Age
         </label>
         <input
+          {...register('age')}
           type='text'
           className='form-control'
           id='age'
-          value={person.age}
-          onChange={handleChange}
         />
       </div>
       <button className='btn btn-primary' type='submit'>
