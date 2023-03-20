@@ -2,17 +2,20 @@ import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
 
+// for better development purposes
+interface FormData {
+  name: string;
+  age: number;
+}
 const Form = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onSubmit = async (data: FieldValues) => {
-    const response = await fetch('url', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    console.log(data);
   };
 
   return (
@@ -22,22 +25,28 @@ const Form = () => {
           Name
         </label>
         <input
-          {...register('name')}
+          {...register('name', { minLength: 3 })}
           type='text'
           className='form-control'
           id='name'
         />
+        {errors.name?.type === 'minLength' && (
+          <p className='text-danger'>Minimun length of 3</p>
+        )}
       </div>
       <div className='mb-3'>
         <label htmlFor='age' className='form-label'>
           Age
         </label>
         <input
-          {...register('age')}
+          {...register('age', { required: 'This is required' })}
           type='text'
           className='form-control'
           id='age'
         />
+        {errors.age?.type === 'required' && (
+          <p className='text-danger'>This is required</p>
+        )}
       </div>
       <button className='btn btn-primary' type='submit'>
         Submit
