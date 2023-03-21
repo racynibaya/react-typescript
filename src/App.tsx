@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import ExpenseList from './expense-tracker/components/ExpenseList';
 import {
   Alert,
   Button,
@@ -12,31 +12,43 @@ import {
   Message,
   User,
 } from './components';
+import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
+import ExpenseForm, {
+  ExpenseFormData,
+} from './expense-tracker/components/ExpenseForm';
 
 const App = () => {
-  const [cart, setCart] = useState({
-    discount: 0.1,
-    items: [
-      { id: 1, title: 'Product 1', quantity: 1 },
-      { id: 2, title: 'Product 2', quantity: 1 },
-    ],
-  });
-  console.log(cart.items[0].quantity);
-  const handleClick = () => {
-    setCart({
-      ...cart,
-      items: cart.items.map(item =>
-        item.id === 1 ? { ...item, quantity: (item.quantity += 1) } : item
-      ),
-    });
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: 'aaa', amount: 10, category: 'Utilities' },
+    { id: 2, description: 'bbb', amount: 10, category: 'Utilities' },
+    { id: 3, description: 'ccc', amount: 10, category: 'Groceries' },
+    { id: 4, description: 'ddd', amount: 10, category: 'Entertainment' },
+  ]);
+
+  const onDelete = (id: number) =>
+    setExpenses(expenses.filter(e => e.id !== id));
+
+  const catFilteringHandler = (category: string) => {
+    setSelectedCategory(category);
   };
+
+  const onSubmit = (expense: ExpenseFormData) =>
+    setExpenses([...expenses, { ...expense, id: expenses.length + 1 }]);
+
+  const visibleExpense = selectedCategory
+    ? expenses.filter(e => e.category === selectedCategory)
+    : expenses;
 
   return (
     <div className='App'>
-      <Alert>
-        reaadf <span>asdfasdf</span>
-      </Alert>
-      <Form />
+      <div className='mb-3'>
+        <ExpenseForm onSubmit={onSubmit} />
+      </div>
+      <div className='mb-3'>
+        <ExpenseFilter onSelectCategory={catFilteringHandler} />
+      </div>
+      <ExpenseList expenses={visibleExpense} onDelete={onDelete} />
     </div>
   );
 };
