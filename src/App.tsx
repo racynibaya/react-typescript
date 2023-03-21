@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import ExpenseList from './expense-tracker/components/ExpenseList';
 import {
   Alert,
   Button,
@@ -14,29 +14,21 @@ import {
 } from './components';
 
 const App = () => {
-  const [cart, setCart] = useState({
-    discount: 0.1,
-    items: [
-      { id: 1, title: 'Product 1', quantity: 1 },
-      { id: 2, title: 'Product 2', quantity: 1 },
-    ],
-  });
-  console.log(cart.items[0].quantity);
-  const handleClick = () => {
-    setCart({
-      ...cart,
-      items: cart.items.map(item =>
-        item.id === 1 ? { ...item, quantity: (item.quantity += 1) } : item
-      ),
-    });
-  };
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: 'aaa', amount: 10, category: 'Utilities' },
+    { id: 2, description: 'bbb', amount: 10, category: 'Utilities' },
+    { id: 3, description: 'ccc', amount: 10, category: 'Utilities' },
+    { id: 4, description: 'ddd', amount: 10, category: 'Utilities' },
+  ]);
 
   return (
     <div className='App'>
-      <Alert>
-        reaadf <span>asdfasdf</span>
-      </Alert>
-      <Form />
+      <ExpenseList
+        expenses={expenses}
+        onDelete={id =>
+          setExpenses(expenses.filter(expense => expense.id !== id))
+        }
+      />
     </div>
   );
 };
