@@ -1,19 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductList from './components/ProductList';
 
-const App = () => {
-  const [category, setCategory] = useState('');
+// Simulating connection
+const connect = () => console.log('Connected');
+const disconnect = () => console.log('Disconnected');
 
-  return (
-    <select
-      className='form-select'
-      onChange={event => setCategory(event.target.value)}
-    >
-      <option value=''></option>
-      <option value='Clothing'>Clothing</option>
-      <option value='Household'>Household</option>
-    </select>
-  );
+const App = () => {
+  useEffect(() => {
+    connect();
+
+    // Effect clean up: It should stop or undo whatever the effect was doing.
+    return () => disconnect();
+  });
+  return <div></div>;
 };
 
 export default App;
