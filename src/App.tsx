@@ -13,9 +13,9 @@ import {
   User,
 } from './components';
 import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
-import ExpenseForm from './expense-tracker/components/ExpenseForm';
-
-
+import ExpenseForm, {
+  ExpenseFormData,
+} from './expense-tracker/components/ExpenseForm';
 
 const App = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -33,6 +33,9 @@ const App = () => {
     setSelectedCategory(category);
   };
 
+  const onSubmit = (expense: ExpenseFormData) =>
+    setExpenses([...expenses, { ...expense, id: expenses.length + 1 }]);
+
   const visibleExpense = selectedCategory
     ? expenses.filter(e => e.category === selectedCategory)
     : expenses;
@@ -40,10 +43,12 @@ const App = () => {
   return (
     <div className='App'>
       <div className='mb-3'>
-        <ExpenseForm />
+        <ExpenseForm onSubmit={onSubmit} />
+      </div>
+      <div className='mb-3'>
+        <ExpenseFilter onSelectCategory={catFilteringHandler} />
       </div>
       <ExpenseList expenses={visibleExpense} onDelete={onDelete} />
-      <ExpenseFilter onSelectCategory={catFilteringHandler} />
     </div>
   );
 };
