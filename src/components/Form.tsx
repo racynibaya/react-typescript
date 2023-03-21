@@ -1,18 +1,30 @@
 import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const schema = z.object({
+  name: z.string().min(3, { message: 'Name must be at least 3 characters' }), // 2nd arg of min: customizing error message
+  age: z
+    .number({ invalid_type_error: 'Age field is required' })
+    .min(18, { message: 'Age must be at least 18.' }),
+});
+
+// It is like defining interface
+type FormData = z.infer<typeof schema>;
 
 // for better development purposes
-interface FormData {
-  name: string;
-  age: number;
-}
+// interface FormData {
+//   name: string;
+//   age: number;
+// }
 const Form = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
@@ -25,29 +37,25 @@ const Form = () => {
           Name
         </label>
         <input
-          {...register('name', { minLength: 3 })}
+          {...register('name')}
           type='text'
           className='form-control'
           id='name'
         />
-        {errors.name?.type === 'minLength' && (
-          <p className='text-danger'>Minimun length of 3</p>
-        )}
+        {errors.name && <p className='text-danger'>{errors.name.message}</p>}
       </div>
       <div className='mb-3'>
         <label htmlFor='age' className='form-label'>
           Age
         </label>
         <input
-          {...register('age', { required: 'This is required' })}
+          {...register('age', { valueAsNumber: true })}
           type='text'
           className='form-control'
           id='age'
         />
-        {errors.age?.type === 'required' && (
-          <p className='text-danger'>This is required</p>
-        )}
       </div>
+      {errors.age && <p className='text-danger'>{errors.age.message}</p>}
       <button className='btn btn-primary' type='submit'>
         Submit
       </button>
