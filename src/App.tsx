@@ -1,54 +1,56 @@
-import { useState } from 'react';
-import ExpenseList from './expense-tracker/components/ExpenseList';
-import {
-  Alert,
-  Button,
-  Card,
-  CardList,
-  ExpandableText,
-  Form,
-  Like,
-  ListGroup,
-  Message,
-  User,
-} from './components';
-import ExpenseFilter from './expense-tracker/components/ExpenseFilter';
-import ExpenseForm, {
-  ExpenseFormData,
-} from './expense-tracker/components/ExpenseForm';
+import { useEffect, useState } from 'react';
+import axios, { AxiosError, CanceledError } from 'axios';
+
+// Simulating connection
+const connect = () => console.log('Connected');
+const disconnect = () => console.log('Disconnected');
+
+// for better development
+interface User {
+  id: number;
+  name: string;
+  address: object;
+}
 
 const App = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [expenses, setExpenses] = useState([
-    { id: 1, description: 'aaa', amount: 10, category: 'Utilities' },
-    { id: 2, description: 'bbb', amount: 10, category: 'Utilities' },
-    { id: 3, description: 'ccc', amount: 10, category: 'Groceries' },
-    { id: 4, description: 'ddd', amount: 10, category: 'Entertainment' },
-  ]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = (id: number) =>
-    setExpenses(expenses.filter(e => e.id !== id));
+  useEffect(() => {
+    // Allows us to cancel or abort async operation like fetch request, dom manipulation, any operation that may take time to complete.
+    const controller = new AbortController();
+    setIsLoading(true);
+    console.log('loading');
 
-  const catFilteringHandler = (category: string) => {
-    setSelectedCategory(category);
-  };
+    axios
+      .get<User[]>('https://jsonplaceholder.typicode.com/users', {
+        signal: controller.signal,
+      })
+      .then(res => {
+        console.log(res);
 
-  const onSubmit = (expense: ExpenseFormData) =>
-    setExpenses([...expenses, { ...expense, id: expenses.length + 1 }]);
+        setUsers(res.data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
 
-  const visibleExpense = selectedCategory
-    ? expenses.filter(e => e.category === selectedCategory)
-    : expenses;
+        if (err instanceof CanceledError) return;
+        setError((err as AxiosError).message);
+        setIsLoading(false);
+        console.log('error');
+      });
+
+    // return controller.abort();
+  }, []);
+
+  console.log(isLoading);
 
   return (
-    <div className='App'>
-      <div className='mb-3'>
-        <ExpenseForm onSubmit={onSubmit} />
-      </div>
-      <div className='mb-3'>
-        <ExpenseFilter onSelectCategory={catFilteringHandler} />
-      </div>
-      <ExpenseList expenses={visibleExpense} onDelete={onDelete} />
+    <div>
+      {isLoading && <div className='spinner-border'></div>}
+      <h1>Hotdog</h1>
     </div>
   );
 };
