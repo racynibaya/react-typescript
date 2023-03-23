@@ -16,7 +16,7 @@ const App = () => {
     setIsLoading(true);
     console.log('loading');
 
-    const { request, cancel } = userService.getAllUsers();
+    const { request, cancel } = userService.getAll<User>();
 
     request
       .then(res => {
@@ -40,20 +40,20 @@ const App = () => {
     const originalUsers = [...users];
     setUsers(users.filter(u => u.id !== user.id));
 
-    userService.deleteUser(user.id).catch(err => {
+    userService.delete(user.id).catch(err => {
       setError(err.message);
       setUsers(originalUsers);
     });
   };
 
-  const addUser = (user: User) => {
+  const createUser = (user: User) => {
     const newUser = { id: 0, name: 'Racyn', address: { town: 'San Agustin' } };
     const originalUsers = [...users];
 
     setUsers([...users, newUser]);
 
     userService
-      .addUser(newUser)
+      .create(newUser)
       .then(({ data: saveUser }) => setUsers([saveUser, ...users]))
       .catch(err => {
         setError(err.message);
@@ -66,7 +66,7 @@ const App = () => {
     const newUser = { ...user, name: user.name + '!' };
     setUsers(users.map(u => (u.id === newUser.id ? newUser : u)));
 
-    userService.updateUser(newUser).catch(err => {
+    userService.update(newUser).catch(err => {
       setError(err.message);
       setUsers(originalUsers);
     });
